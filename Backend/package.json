@@ -1,0 +1,26 @@
+{
+  "name": "booking-demo-class-backend",
+  "version": "1.0.0",
+  "description": "Backend for Booking Demo Class",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon -r dotenv/config src/index.js",
+    "start": "node -r dotenv/config src/index.js",
+    "seed:mentors": "node -r dotenv/config src/scripts/seedMentors.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.7",
+    "express": "^5.3.0",
+    "mongoose": "^9.11.1",
+    "nodemailer": "^10.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

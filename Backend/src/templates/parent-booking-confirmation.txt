@@ -1,0 +1,23 @@
+Your trial class is booked
+Reference: {{bookingReference}}
+
+Hello {{parentName}},
+
+Your trial class for {{studentName}} has been booked with mentor {{mentorName}}.
+Please find the class details below.
+
+Booking reference : {{bookingReference}}
+Student           : {{studentName}}
+Mentor            : {{mentorName}}
+Class date        : {{classDate}}
+Class start       : {{classStartTime}}
+Class end         : {{classEndTime}}
+Your time zone    : {{timeZoneLabel}}
+
+{{meetingNotice}}
+
+All times shown above are in your local time zone. No payment is required
+for this demonstration. Please contact support if you need to reschedule.
+
+--
+You are receiving this email because a booking was made on {{appName}}.

@@ -1,0 +1,23 @@
+You have a new trial class
+Reference: {{bookingReference}}
+
+Hello {{mentorName}},
+
+A trial class with student {{studentName}} has been assigned to you.
+Please find the class details below.
+
+Booking reference : {{bookingReference}}
+Student           : {{studentName}}
+Parent            : {{parentName}} ({{parentEmail}})
+Class date        : {{classDate}}
+Class start       : {{classStartTime}}
+Class end         : {{classEndTime}}
+Your time zone    : {{timeZoneLabel}}
+
+{{meetingNotice}}
+
+All times shown above are in your local time zone. This is a demonstration
+classroom and no real video call is provided.
+
+--
+You are receiving this email because a class was scheduled on {{appName}}.

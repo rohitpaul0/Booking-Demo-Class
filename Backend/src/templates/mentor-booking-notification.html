@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Class Notification</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f5f7; font-family: Arial, Helvetica, sans-serif; color: #1f2937;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f5f7; padding: 24px 8px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
+          <tr>
+            <td style="background-color: #0f766e; color: #ffffff; padding: 20px 28px;">
+              <h1 style="margin: 0; font-size: 20px;">You have a new trial class</h1>
+              <p style="margin: 4px 0 0; font-size: 13px; opacity: 0.85;">Reference: {{bookingReference}}</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 28px;">
+              <p style="margin: 0 0 16px; font-size: 15px;">Hello {{mentorName}},</p>
+              <p style="margin: 0 0 16px; font-size: 15px; line-height: 1.6;">
+                A trial class with student <strong>{{studentName}}</strong> has been assigned to you.
+                Please find the class details below.
+              </p>
+
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border: 1px solid #e5e7eb; border-radius: 6px; margin-bottom: 20px;">
+                <tr>
+                  <td style="padding: 12px 16px; background-color: #f9fafb; font-size: 13px; color: #6b7280; width: 200px;">Booking reference</td>
+                  <td style="padding: 12px 16px; font-size: 14px; font-weight: 600;">{{bookingReference}}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 16px; background-color: #f9fafb; font-size: 13px; color: #6b7280;">Student</td>
+                  <td style="padding: 12px 16px; font-size: 14px;">{{studentName}}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 16px; background-color: #f9fafb; font-size: 13px; color: #6b7280;">Parent</td>
+                  <td style="padding: 12px 16px; font-size: 14px;">{{parentName}} ({{parentEmail}})</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 16px; background-color: #f9fafb; font-size: 13px; color: #6b7280;">Class date</td>
+                  <td style="padding: 12px 16px; font-size: 14px;">{{classDate}}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 16px; background-color: #f9fafb; font-size: 13px; color: #6b7280;">Class start</td>
+                  <td style="padding: 12px 16px; font-size: 14px;">{{classStartTime}}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 16px; background-color: #f9fafb; font-size: 13px; color: #6b7280;">Class end</td>
+                  <td style="padding: 12px 16px; font-size: 14px;">{{classEndTime}}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 16px; background-color: #f9fafb; font-size: 13px; color: #6b7280;">Your time zone</td>
+                  <td style="padding: 12px 16px; font-size: 14px;">{{timeZoneLabel}}</td>
+                </tr>
+              </table>
+
+              {{meetingNotice}}
+
+              <p style="margin: 20px 0 0; font-size: 13px; color: #6b7280; line-height: 1.5;">
+                All times shown above are in your local time zone. This is a demonstration
+                classroom and no real video call is provided.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color: #f9fafb; border-top: 1px solid #e5e7eb; padding: 14px 28px; font-size: 12px; color: #9ca3af;">
+              You are receiving this email because a class was scheduled on {{appName}}.
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
