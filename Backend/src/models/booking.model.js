@@ -84,6 +84,10 @@ const bookingSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    meetingRoomName: {
+      type: String,
+      default: null,
+    },
     meetingToken: {
       type: String,
       default: null,

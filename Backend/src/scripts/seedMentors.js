@@ -8,7 +8,38 @@ const toSlot = (dateString, startTime, endTime) => ({
   endTime: zonedDateTimeToUtc(dateString, endTime),
 });
 
-const DEMO_DATES = ["2026-10-12", "2026-10-13", "2026-10-14"];
+/**
+ * Build an array of YYYY-MM-DD strings for the next `days` calendar days
+ * starting from tomorrow (Asia/Kolkata).
+ */
+const getUpcomingDates = (days = 7) => {
+  const now = new Date();
+  // Use Intl to get today's date in IST so the seed is timezone-correct.
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Kolkata",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  const parts = formatter.formatToParts(now);
+  const values = {};
+  for (const part of parts) {
+    if (part.type !== "literal") values[part.type] = Number(part.value);
+  }
+
+  const dates = [];
+  for (let offset = 1; offset <= days; offset++) {
+    const d = new Date(Date.UTC(values.year, values.month - 1, values.day + offset, 6));
+    const year = d.getUTCFullYear();
+    const month = String(d.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(d.getUTCDate()).padStart(2, "0");
+    dates.push(`${year}-${month}-${day}`);
+  }
+
+  return dates;
+};
+
+const DEMO_DATES = getUpcomingDates(7);
 
 const mentorProfiles = [
   { name: "Aditi Nair", email: "aditi.nair@example.com" },
@@ -23,11 +54,12 @@ const mentorProfiles = [
   { name: "Rohit Verma", email: "rohit.verma@example.com" },
 ];
 
-// 10 mentors (all in India). With the 2 classes/day limit this gives roughly
-// 20 bookable classes per day, matching ~20 parents/day. Availability is kept
-// in the late-morning/evening IST window so it overlaps US and UK daytime.
+// 10 mentors (all in Asia/Kolkata). With the 2-class/day limit this gives
+// up to 20 bookable classes per day, matching ~20 parents/day. Availability
+// windows are staggered so different mentors cover different hours, giving
+// breadth across the IST day (which overlaps US and UK daytime).
 const demoMentors = mentorProfiles.map((profile, index) => {
-  const startHour = 8 + (index % 4);
+  const startHour = 8 + (index % 4); // 08, 09, 10, 11 repeated
   const startTime = `${String(startHour).padStart(2, "0")}:00`;
 
   return {
@@ -41,6 +73,8 @@ const demoMentors = mentorProfiles.map((profile, index) => {
 const seedMentors = async () => {
   let created = 0;
   let updated = 0;
+
+  console.log(`Seeding mentors for dates: ${DEMO_DATES.join(", ")}`);
 
   for (const mentorData of demoMentors) {
     const existing = await Mentor.findOne({ email: mentorData.email });

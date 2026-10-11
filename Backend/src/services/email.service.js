@@ -25,14 +25,29 @@ const renderTemplate = (template, values) =>
     (_match, key) => (values[key] !== undefined ? values[key] : "")
   );
 
-export const getSmtpConfig = () => ({
-  transport: (process.env.SMTP_TRANSPORT || "smtp").toLowerCase(),
-  host: process.env.SMTP_HOST || "",
-  port: process.env.SMTP_PORT || "",
-  secure: process.env.SMTP_SECURE === "true",
-  from: process.env.MAIL_FROM || "Booking Demo Class <no-reply@localhost>",
-  requiresAuth: process.env.SMTP_AUTH !== "false",
-});
+export const getSmtpConfig = () => {
+  const explicit = (process.env.SMTP_TRANSPORT || "").toLowerCase();
+  const host = process.env.SMTP_HOST || "";
+  const port = process.env.SMTP_PORT || "";
+
+  // If SMTP_TRANSPORT is explicitly set to a known simulation transport, use it.
+  // If it's set to "smtp" but no host/port are configured, fall back to "json"
+  // so the demo works without real SMTP credentials.
+  let transport = explicit || "smtp";
+  if (transport === "smtp" && (!host || !port)) {
+    transport = "json";
+  }
+
+  return {
+    transport,
+    host,
+    port,
+    secure: process.env.SMTP_SECURE === "true",
+    from: process.env.MAIL_FROM || "Booking Demo Class <no-reply@localhost>",
+    requiresAuth: process.env.SMTP_AUTH !== "false",
+    simulated: transport !== "smtp",
+  };
+};
 
 export const buildTransporter = () => {
   const config = getSmtpConfig();
@@ -100,26 +115,39 @@ const friendlyZoneName = (timeZone) => {
   return parts[parts.length - 1].replace(/_/g, " ");
 };
 
+const isHttpUrl = (value) => {
+  if (typeof value !== "string" || value.trim() === "") {
+    return false;
+  }
+
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+};
+
 export const meetingNoticeFragments = (meetingLink) => {
-  if (!meetingLink) {
+  if (!isHttpUrl(meetingLink)) {
     return {
       html:
         '<p style="margin: 16px 0 0; font-size: 14px; color: #b45309;">' +
-        "A demo classroom link is not available yet for this booking.</p>",
-      text: "A demo classroom link is not available yet for this booking.",
+        "A meeting link is not available yet for this booking.</p>",
+      text: "A meeting link is not available yet for this booking.",
     };
   }
 
   return {
     html:
-      `<p style="margin: 16px 0 0; font-size: 14px;">Demo classroom link` +
-      ` <span style="color: #6b7280;">(demonstration only)</span>: ` +
-      `<a href="${meetingLink}" style="color: #4f46e5;">${meetingLink}</a></p>` +
+      `<p style="margin: 16px 0 0; font-size: 14px;">Join your Jitsi Meet room` +
+      ` <span style="color: #6b7280;">(opens in a new tab)</span>: ` +
+      `<a href="${meetingLink}" target="_blank" rel="noopener noreferrer" style="color: #4f46e5;">${meetingLink}</a></p>` +
       '<p style="margin: 8px 0 0; font-size: 12px; color: #9ca3af;">' +
-      "This link is for demonstration only and does not provide a real video call.</p>",
+      "This is a public Jitsi Meet room. Public rooms are not private or access-controlled by default, so anyone with the link can join.</p>",
     text:
-      `Demo classroom link (demonstration only): ${meetingLink}\n` +
-      "This link is for demonstration only and does not provide a real video call.",
+      `Join your Jitsi Meet room (opens in a new tab): ${meetingLink}\n` +
+      "This is a public Jitsi Meet room. Public rooms are not private or access-controlled by default, so anyone with the link can join.",
   };
 };
 

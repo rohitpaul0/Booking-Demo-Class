@@ -16,7 +16,10 @@ import {
 } from "../utils/timezone.js";
 import { intervalOverlaps } from "../utils/availability.js";
 import ApiError from "../utils/ApiError.js";
-import { createDemoMeeting } from "./meeting.service.js";
+import {
+  createDemoMeeting,
+  isJitsiMeetingUrl,
+} from "./meeting.service.js";
 import { sendBookingNotifications } from "./email.service.js";
 
 const MINUTE_MS = 60 * 1000;
@@ -316,6 +319,26 @@ export const buildBookingResponse = (booking, mentor) => {
   const parentTimeZone = booking.parentTimeZone;
   const mentorTimeZone = mentor.timeZone;
 
+  // Only expose a saved link when it is a real Jitsi room URL for this
+  // deployment. A missing, malformed, or legacy /demo-class value is surfaced as
+  // a graceful "not available" message instead of a fake meeting link.
+  const meetingLink = isJitsiMeetingUrl(booking.meetingLink)
+    ? booking.meetingLink
+    : null;
+  const meetingCreated =
+    booking.meetingStatus === "demo_ready" && Boolean(meetingLink);
+
+  let meetingMessage = "Meeting link is created once the booking is confirmed.";
+  if (booking.meetingStatus === "demo_ready" && meetingLink) {
+    meetingMessage =
+      "Your Jitsi Meet room is ready. Join the meeting in a new browser tab at class time. " +
+      "Public Jitsi rooms are not private or access-controlled by default.";
+  } else if (booking.meetingStatus === "demo_ready" && !meetingLink) {
+    meetingMessage = "The saved meeting link is missing or invalid.";
+  } else if (booking.meetingStatus === "failed") {
+    meetingMessage = "Meeting link generation failed. Please try again later.";
+  }
+
   return {
     bookingId: booking._id.toString(),
     status: booking.status,
@@ -346,14 +369,10 @@ export const buildBookingResponse = (booking, mentor) => {
     },
     meeting: {
       status: booking.meetingStatus,
-      link: booking.meetingLink ?? null,
-      created: booking.meetingStatus === "demo_ready",
-      message:
-        booking.meetingStatus === "demo_ready"
-          ? "Demo meeting link is ready. No real video call is available yet."
-          : booking.meetingStatus === "failed"
-          ? "Meeting link generation failed."
-          : "Meeting link is created once the booking is confirmed.",
+      link: meetingLink,
+      roomName: meetingLink ? booking.meetingRoomName || null : null,
+      created: meetingCreated,
+      message: meetingMessage,
     },
   };
 };

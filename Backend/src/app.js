@@ -3,7 +3,6 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import slotRoutes from "./routes/slot.routes.js";
 import bookingRoutes from "./routes/booking.routes.js";
-import meetingRoutes from "./routes/meeting.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
 
 const app = express();
@@ -27,7 +26,6 @@ app.get("/", (req, res) => {
 app.use("/api/slots", slotRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/bookings", notificationRoutes);
-app.use("/demo-class", meetingRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ success: false, message: "Route not found" });

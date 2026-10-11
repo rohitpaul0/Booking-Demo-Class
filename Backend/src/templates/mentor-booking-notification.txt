@@ -16,8 +16,9 @@ Your time zone    : {{timeZoneLabel}}
 
 {{meetingNotice}}
 
-All times shown above are in your local time zone. This is a demonstration
-classroom and no real video call is provided.
+All times shown above are in your local time zone. The meeting link opens a
+Jitsi Meet room in a new browser tab. Public Jitsi rooms are not private or
+access-controlled by default, so anyone with the link can join.
 
 --
 You are receiving this email because a class was scheduled on {{appName}}.
