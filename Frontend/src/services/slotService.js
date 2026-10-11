@@ -23,7 +23,7 @@ const toFriendlyMessage = (error) => {
  *
  * Backend contract (see Backend/src/routes/slot.routes.js and
  * Backend/src/controllers/slot.controller.js):
- *   GET {VITE_API_BASE_URL}/slots?date=YYYY-MM-DD&timeZone=<IANA>
+ *   GET {API_BASE_URL}/slots?date=YYYY-MM-DD&timeZone=<IANA>
  *   -> { success: true, data: {
  *          date, timeZone, mentorTimeZone, durationMinutes, totalSlots,
  *          slots: [{ startTime, endTime, startTimeLocal, endTimeLocal, availableMentors }]

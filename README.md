@@ -96,7 +96,7 @@ npm install
 Create or update `Frontend/.env`:
 
 ```env
-VITE_API_BASE_URL=http://localhost:8000/api/v1
+API_BASE_URL=http://localhost:8000/api
 ```
 
 Ensure the URL matches the actual API prefix configured in the backend.
@@ -168,7 +168,7 @@ If the build succeeds, Vite generates the production files in the `Frontend/dist
 
 **Frontend cannot reach the backend**
 - Confirm that the backend is running.
-- Verify `VITE_API_BASE_URL` in `Frontend/.env`.
+- Verify `API_BASE_URL` in `Frontend/.env`.
 - Check the backend CORS configuration and browser console.
 
 **No available slots**
