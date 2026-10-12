@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import connectDB from "./db/db.js";
 import slotRoutes from "./routes/slot.routes.js";
 import bookingRoutes from "./routes/booking.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
@@ -21,6 +22,24 @@ app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("Booking Demo Class Backend is running!");
+});
+
+// Connect to MongoDB before processing API requests.
+app.use("/api", async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error(
+      "Database connection failed while handling request:",
+      error.message
+    );
+
+    return res.status(500).json({
+      success: false,
+      message: "Database connection failed",
+    });
+  }
 });
 
 app.use("/api/slots", slotRoutes);
@@ -46,7 +65,9 @@ app.use((error, req, res, next) => {
 
   return res.status(statusCode).json({
     success: false,
-    message: isMalformedJson ? "Invalid JSON request body" : "Internal server error",
+    message: isMalformedJson
+      ? "Invalid JSON request body"
+      : "Internal server error",
   });
 });
 
