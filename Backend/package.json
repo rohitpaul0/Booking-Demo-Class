@@ -8,7 +8,8 @@
     "dev": "nodemon -r dotenv/config src/index.js",
     "start": "node -r dotenv/config src/index.js",
     "seed:mentors": "node -r dotenv/config src/scripts/seedMentors.js",
-    "migrate:meetings": "node -r dotenv/config src/scripts/migrateMeetingLinks.js"
+    "migrate:meetings": "node -r dotenv/config src/scripts/migrateMeetingLinks.js",
+    "test": "node --test"
   },
   "keywords": [],
   "author": "",

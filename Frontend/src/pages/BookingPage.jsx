@@ -26,7 +26,7 @@ import SectionHeading from "../components/SectionHeading.jsx";
 import { getAvailableSlots } from "../services/slotService.js";
 import { createBooking, confirmBooking } from "../services/bookingService.js";
 import { getSelectableDates } from "../utils/dateOptions.js";
-import { DISPLAY_TIME_ZONE, getTimeZoneLabel } from "../utils/timezone.js";
+import { detectTimeZone, getTimeZoneLabel } from "../utils/timezone.js";
 
 const STEPS = ["Your details", "Choose a time", "Review booking"];
 
@@ -237,19 +237,26 @@ function ConfirmedBookingCard({ booking, onBookAgain }) {
 // ─── Main page ───────────────────────────────────────────────────────────────
 
 function BookingPage() {
-  const dateOptions = useMemo(() => getSelectableDates(), []);
-
   const [values, setValues] = useState(INITIAL_VALUES);
   const [errors, setErrors] = useState({});
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [reviewRequested, setReviewRequested] = useState(false);
 
+  // Parent's time zone, detected from the browser and overridable in the form.
+  // It drives the slot query, the selectable dates, and the booking payload.
+  const [parentTimeZone, setParentTimeZone] = useState(() => detectTimeZone());
+
+  // The picker window follows the same zone used for the slot query.
+  const dateOptions = useMemo(
+    () => getSelectableDates({ timeZone: parentTimeZone }),
+    [parentTimeZone]
+  );
+
   // Real availability from the backend.
   const [slots, setSlots] = useState([]);
   const [slotsLoading, setSlotsLoading] = useState(false);
   const [slotsError, setSlotsError] = useState("");
-  const [slotsTimeZone, setSlotsTimeZone] = useState(DISPLAY_TIME_ZONE);
   const [reloadToken, setReloadToken] = useState(0);
 
   // Booking submission state.
@@ -257,8 +264,9 @@ function BookingPage() {
   const [submitError, setSubmitError] = useState("");
   const [confirmedBooking, setConfirmedBooking] = useState(null);
 
-  // The backend requires a specific date, so slots load when the date changes
-  // (and on retry). Responses from a superseded date are ignored.
+  // The backend requires a specific date, so slots load when the date or the
+  // selected time zone changes (and on retry). Responses from superseded
+  // requests are ignored via the `cancelled` flag.
   useEffect(() => {
     if (!selectedDate) {
       setSlots([]);
@@ -271,11 +279,10 @@ function BookingPage() {
     setSlotsLoading(true);
     setSlotsError("");
 
-    getAvailableSlots({ date: selectedDate, timeZone: DISPLAY_TIME_ZONE })
+    getAvailableSlots({ date: selectedDate, timeZone: parentTimeZone })
       .then((result) => {
         if (cancelled) return;
         setSlots(result.slots);
-        setSlotsTimeZone(result.timeZone || DISPLAY_TIME_ZONE);
         // Keep the selected time only if the backend still offers it.
         setSelectedSlot((prev) =>
           prev && result.slots.some((slot) => slot.id === prev.id) ? prev : null
@@ -293,15 +300,18 @@ function BookingPage() {
     return () => {
       cancelled = true;
     };
-  }, [selectedDate, reloadToken]);
+  }, [selectedDate, parentTimeZone, reloadToken]);
 
   const selectedDateEntry =
     dateOptions.find((item) => item.date === selectedDate) ?? null;
 
-  const timeZoneLabel = useMemo(
-    () => getTimeZoneLabel(slotsTimeZone),
-    [slotsTimeZone]
-  );
+  // Label the zone with the offset that applies on the class date. Prefer the
+  // chosen slot; before a time is picked, fall back to the first offered slot
+  // (same selected local day), and only then to "now".
+  const timeZoneLabel = useMemo(() => {
+    const referenceInstant = selectedSlot?.startTime || slots[0]?.startTime;
+    return getTimeZoneLabel(parentTimeZone, referenceInstant);
+  }, [parentTimeZone, selectedSlot, slots]);
 
   const detailsComplete = Boolean(
     values.parentName.trim() && values.parentEmail.trim() && values.studentName.trim()
@@ -312,6 +322,21 @@ function BookingPage() {
   const handleFieldChange = (name, value) => {
     setValues((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => (prev[name] ? { ...prev, [name]: undefined } : prev));
+    setReviewRequested(false);
+    setSubmitError("");
+  };
+
+  const handleTimeZoneChange = (nextTimeZone) => {
+    if (nextTimeZone === parentTimeZone) {
+      return;
+    }
+
+    setParentTimeZone(nextTimeZone);
+    // The selected time was labelled in the previous zone, so drop it and let
+    // the effect refetch slots (and rebuild dates) in the new zone.
+    setSelectedSlot(null);
+    setSlots([]);
+    setErrors((prev) => (prev.slot ? { ...prev, slot: undefined } : prev));
     setReviewRequested(false);
     setSubmitError("");
   };
@@ -414,7 +439,7 @@ function BookingPage() {
         parentName: values.parentName.trim(),
         parentEmail: values.parentEmail.trim().toLowerCase(),
         studentName: values.studentName.trim(),
-        parentTimeZone: DISPLAY_TIME_ZONE,
+        parentTimeZone,
         startTime: selectedSlot.startTime,
       });
 
@@ -510,6 +535,8 @@ function BookingPage() {
                   values={values}
                   errors={errors}
                   onChange={handleFieldChange}
+                  timeZone={parentTimeZone}
+                  onTimeZoneChange={handleTimeZoneChange}
                 />
 
                 <DateSelector

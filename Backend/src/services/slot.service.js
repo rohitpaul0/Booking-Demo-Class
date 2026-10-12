@@ -84,6 +84,9 @@ export const getAvailableSlots = async (dateString, timeZone = TIME_ZONE) => {
     const endMs = startMs + durationMs;
     const startDate = new Date(startMs);
     let availableMentors = 0;
+    // Zones of the mentors who can actually take this slot. Different mentors
+    // may observe different zones (and DST states), so this is kept per slot.
+    const mentorTimeZones = new Set();
 
     for (const mentor of mentors) {
       const mentorId = String(mentor._id);
@@ -122,6 +125,7 @@ export const getAvailableSlots = async (dateString, timeZone = TIME_ZONE) => {
       }
 
       availableMentors += 1;
+      mentorTimeZones.add(mentor.timeZone || TIME_ZONE);
     }
 
     if (availableMentors > 0) {
@@ -133,6 +137,7 @@ export const getAvailableSlots = async (dateString, timeZone = TIME_ZONE) => {
         startTimeLocal: formatTimeInZone(startDate, displayTimeZone),
         endTimeLocal: formatTimeInZone(endDate, displayTimeZone),
         availableMentors,
+        mentorTimeZones: Array.from(mentorTimeZones).sort(),
       });
     }
   }
@@ -140,7 +145,6 @@ export const getAvailableSlots = async (dateString, timeZone = TIME_ZONE) => {
   return {
     date: dateString,
     timeZone: displayTimeZone,
-    mentorTimeZone: TIME_ZONE,
     durationMinutes: TRIAL_CLASS_DURATION_MINUTES,
     totalSlots: slots.length,
     slots,

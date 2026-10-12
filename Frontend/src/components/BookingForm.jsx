@@ -1,8 +1,17 @@
 import { Users } from "lucide-react";
 import Card from "./Card.jsx";
 import FormField, { inputClassName } from "./FormField.jsx";
+import { getTimeZoneOptions } from "../utils/timezone.js";
 
-function BookingForm({ values, errors, onChange }) {
+function BookingForm({
+  values,
+  errors,
+  onChange,
+  timeZone,
+  onTimeZoneChange,
+}) {
+  const timeZoneOptions = getTimeZoneOptions(timeZone);
+
   return (
     <Card>
       <div className="mb-6 flex items-start gap-3">
@@ -71,6 +80,26 @@ function BookingForm({ values, errors, onChange }) {
             autoComplete="off"
             className={inputClassName}
           />
+        </FormField>
+
+        <FormField
+          id="parentTimeZone"
+          label="Your time zone"
+          hint="Class times are shown in this time zone. Change it if needed."
+          className="sm:col-span-2"
+        >
+          <select
+            name="parentTimeZone"
+            value={timeZone}
+            onChange={(event) => onTimeZoneChange(event.target.value)}
+            className={inputClassName}
+          >
+            {timeZoneOptions.map((zone) => (
+              <option key={zone} value={zone}>
+                {zone}
+              </option>
+            ))}
+          </select>
         </FormField>
       </div>
     </Card>

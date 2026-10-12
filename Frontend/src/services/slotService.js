@@ -25,13 +25,15 @@ const toFriendlyMessage = (error) => {
  * Backend/src/controllers/slot.controller.js):
  *   GET {API_BASE_URL}/slots?date=YYYY-MM-DD&timeZone=<IANA>
  *   -> { success: true, data: {
- *          date, timeZone, mentorTimeZone, durationMinutes, totalSlots,
- *          slots: [{ startTime, endTime, startTimeLocal, endTimeLocal, availableMentors }]
+ *          date, timeZone, durationMinutes, totalSlots,
+ *          slots: [{ startTime, endTime, startTimeLocal, endTimeLocal,
+ *                    availableMentors, mentorTimeZones }]
  *        } }
  *
  * - `date` is interpreted by the backend as a calendar day IN `timeZone`.
  * - `startTime`/`endTime` are unambiguous UTC instants (ISO 8601 with "Z").
  * - `startTimeLocal`/`endTimeLocal` are already localised to `timeZone`.
+ * - `mentorTimeZones` lists the zones of the mentors offering that slot.
  * - Only available slots are returned; busy slots are simply omitted.
  */
 export const getAvailableSlots = async ({ date, timeZone }) => {
@@ -64,12 +66,12 @@ export const getAvailableSlots = async ({ date, timeZone }) => {
       startTimeLocal: slot.startTimeLocal,
       endTimeLocal: slot.endTimeLocal,
       availableMentors: slot.availableMentors,
+      mentorTimeZones: Array.isArray(slot.mentorTimeZones) ? slot.mentorTimeZones : [],
     }));
 
   return {
     date: data.date,
     timeZone: data.timeZone,
-    mentorTimeZone: data.mentorTimeZone,
     durationMinutes: data.durationMinutes,
     slots,
   };

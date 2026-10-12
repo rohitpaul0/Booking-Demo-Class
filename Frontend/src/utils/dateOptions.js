@@ -1,4 +1,4 @@
-import { DISPLAY_TIME_ZONE } from "./timezone.js";
+import { FALLBACK_TIME_ZONE } from "./timezone.js";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 const DEFAULT_DAYS = 7;
@@ -47,7 +47,7 @@ const toDateKey = (date) => {
  */
 export const getSelectableDates = ({
   days = DEFAULT_DAYS,
-  timeZone = DISPLAY_TIME_ZONE,
+  timeZone = FALLBACK_TIME_ZONE,
 } = {}) => {
   const { year, month, day } = getTodayInZone(timeZone);
 
