@@ -122,7 +122,7 @@ function ConfirmedBookingCard({ booking, onBookAgain }) {
     <Card className="space-y-6 border-teal-brand/30 bg-mint/20">
       {/* Success header */}
       <div className="flex items-center gap-3">
-        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-teal-brand to-secondary text-white shadow-md shadow-teal-brand/30">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-teal-brand to-secondary text-white shadow-md shadow-teal-brand/30 sm:h-12 sm:w-12">
           <CheckCircle2 className="h-6 w-6" aria-hidden="true" />
         </span>
         <div>
@@ -145,7 +145,7 @@ function ConfirmedBookingCard({ booking, onBookAgain }) {
           <dd className="text-sm font-semibold text-ink">{student?.name}</dd>
         </div>
         <div>
-          <dt className="text-xs font-medium uppercase tracking-wide text-muted">
+          <dt className="break-words text-xs font-medium uppercase tracking-wide text-muted">
             Your time ({parentLocal?.timeZone})
           </dt>
           <dd className="text-sm font-semibold text-ink">
@@ -153,7 +153,7 @@ function ConfirmedBookingCard({ booking, onBookAgain }) {
           </dd>
         </div>
         <div>
-          <dt className="text-xs font-medium uppercase tracking-wide text-muted">
+          <dt className="break-words text-xs font-medium uppercase tracking-wide text-muted">
             Mentor time ({mentorLocal?.timeZone})
           </dt>
           <dd className="text-sm font-semibold text-ink">
@@ -460,7 +460,7 @@ function BookingPage() {
     return (
       <div className="min-h-screen bg-background">
         <BookingHeader />
-        <main className="py-8 sm:py-12">
+        <main className="py-6 sm:py-10">
           <PageContainer>
             <ConfirmedBookingCard
               booking={confirmedBooking}
@@ -489,15 +489,15 @@ function BookingPage() {
     <div className="min-h-screen bg-background">
       <BookingHeader />
 
-      <main className="py-8 sm:py-12">
+      <main className="py-6 sm:py-10">
         <PageContainer>
-          <div className="space-y-8">
-            <section className="relative overflow-hidden rounded-3xl border border-border bg-surface p-6 shadow-sm shadow-slate-200/70 sm:p-8">
+          <div className="space-y-6">
+            <section className="relative overflow-hidden rounded-2xl border border-border bg-surface p-4 shadow-sm shadow-slate-200/60 sm:p-6">
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-linear-to-br from-lavender via-paleblue to-mint opacity-80 blur-2xl"
               />
-              <div className="relative space-y-6">
+              <div className="relative space-y-4 sm:space-y-5">
                 <SectionHeading
                   eyebrow="Free Demo Class"
                   title={
@@ -523,14 +523,14 @@ function BookingPage() {
                   ))}
                 </ul>
 
-                <div className="border-t border-border pt-6">
+                <div className="border-t border-border pt-4 sm:pt-5">
                   <StepIndicator steps={STEPS} currentStep={currentStep} />
                 </div>
               </div>
             </section>
 
-            <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
-              <div className="space-y-6">
+            <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-8">
+              <div className="space-y-4 sm:space-y-6">
                 <BookingForm
                   values={values}
                   errors={errors}
@@ -575,16 +575,20 @@ function BookingPage() {
                     </div>
                   )}
 
-                  <div className="flex flex-wrap items-center gap-3">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                     <Button
                       variant="primary"
                       onClick={handleReview}
-                      className="px-6 py-3 text-base"
+                      className="w-full px-6 py-3 text-base sm:w-auto"
                     >
                       Review Booking
                       <ArrowRight className="h-4 w-4" aria-hidden="true" />
                     </Button>
-                    <Button variant="secondary" onClick={handleReset}>
+                    <Button
+                      variant="secondary"
+                      onClick={handleReset}
+                      className="w-full sm:w-auto"
+                    >
                       <RotateCcw className="h-4 w-4" aria-hidden="true" />
                       Reset
                     </Button>
@@ -636,12 +640,12 @@ function BookingPage() {
                         </div>
                       )}
 
-                      <div className="flex flex-wrap items-center gap-3">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                         <Button
                           variant="primary"
                           onClick={handleConfirmBooking}
                           disabled={submitting}
-                          className="px-6 py-3 text-base"
+                          className="w-full px-6 py-3 text-base sm:w-auto"
                           id="confirm-booking-btn"
                         >
                           {submitting ? (
@@ -669,6 +673,7 @@ function BookingPage() {
                             setSubmitError("");
                           }}
                           disabled={submitting}
+                          className="w-full sm:w-auto"
                         >
                           <PencilLine className="h-4 w-4" aria-hidden="true" />
                           Edit details
@@ -686,7 +691,7 @@ function BookingPage() {
                 timeLabel={timeLabel}
                 timeZoneLabel={timeZoneLabel}
                 isComplete={isComplete}
-                className="lg:sticky lg:top-24"
+                className="lg:sticky lg:top-20"
               />
             </div>
           </div>

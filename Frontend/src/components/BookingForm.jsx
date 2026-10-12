@@ -14,8 +14,8 @@ function BookingForm({
 
   return (
     <Card>
-      <div className="mb-6 flex items-start gap-3">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-lavender text-primary">
+      <div className="mb-4 flex items-start gap-3 sm:mb-5">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-lavender text-primary sm:h-10 sm:w-10">
           <Users className="h-5 w-5" aria-hidden="true" />
         </span>
         <div className="space-y-1">
@@ -28,7 +28,7 @@ function BookingForm({
         </div>
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
         <FormField
           id="parentName"
           label="Parent full name"

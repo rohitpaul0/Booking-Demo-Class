@@ -1,7 +1,7 @@
 import { Loader2 } from "lucide-react";
 
 const baseStyles =
-  "inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none";
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none disabled:active:scale-100";
 
 const variantStyles = {
   primary:
@@ -25,7 +25,7 @@ function Button({
       disabled={disabled || loading}
       className={`${baseStyles} ${
         variantStyles[variant] ?? variantStyles.primary
-      } px-5 py-2.5 text-sm ${className}`}
+      } px-4 py-2.5 text-sm sm:px-5 ${className}`}
       {...props}
     >
       {loading && (

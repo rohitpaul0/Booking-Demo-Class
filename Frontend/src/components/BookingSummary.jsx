@@ -47,9 +47,9 @@ function BookingSummary({
   className = "",
 }) {
   return (
-    <Card className={`space-y-5 ${className}`}>
+    <Card className={`space-y-4 sm:space-y-5 ${className}`}>
       <div className="flex items-center gap-3">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-primary to-secondary text-white shadow-sm shadow-primary/30">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-primary to-secondary text-white shadow-sm shadow-primary/30 sm:h-10 sm:w-10">
           <ClipboardList className="h-5 w-5" aria-hidden="true" />
         </span>
         <h3 className="text-lg font-semibold text-ink">Booking summary</h3>
@@ -108,7 +108,7 @@ function BookingSummary({
           <p className="text-xs font-medium uppercase tracking-wide text-teal-brand/80">
             Time zone
           </p>
-          <p className="text-sm font-medium text-ink">{timeZoneLabel}</p>
+          <p className="break-words text-sm font-medium text-ink">{timeZoneLabel}</p>
         </div>
       </div>
 

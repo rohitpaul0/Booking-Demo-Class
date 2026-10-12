@@ -3,7 +3,7 @@ import { Check } from "lucide-react";
 function StepIndicator({ steps, currentStep }) {
   return (
     <ol
-      className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-3"
+      className="flex items-center gap-2 sm:gap-3"
       aria-label="Booking progress"
     >
       {steps.map((step, index) => {
@@ -12,13 +12,13 @@ function StepIndicator({ steps, currentStep }) {
         const isComplete = stepNumber < currentStep;
 
         return (
-          <li key={step} className="flex flex-1 items-center gap-3">
+          <li key={step} className="flex min-w-0 flex-1 items-center gap-2">
             <span
-              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold transition-colors ${
+              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold transition-colors sm:h-9 sm:w-9 sm:text-sm ${
                 isComplete
                   ? "bg-teal-brand text-white"
                   : isActive
-                  ? "bg-linear-to-br from-primary to-secondary text-white shadow-md shadow-secondary/30 ring-4 ring-lavender"
+                  ? "bg-linear-to-br from-primary to-secondary text-white shadow-sm shadow-secondary/30 ring-4 ring-lavender"
                   : "border border-border bg-surface text-muted"
               }`}
               aria-hidden="true"
@@ -27,13 +27,11 @@ function StepIndicator({ steps, currentStep }) {
             </span>
 
             <span
-              className={`text-sm ${
+              className={`min-w-0 truncate text-xs sm:text-sm ${
                 isActive
-                  ? "font-semibold text-ink"
-                  : isComplete
-                  ? "font-medium text-ink"
-                  : "text-muted"
-              }`}
+                  ? "block font-semibold text-ink"
+                  : "hidden font-medium text-muted sm:block"
+              } ${isComplete ? "sm:font-medium sm:text-ink" : ""}`}
               aria-current={isActive ? "step" : undefined}
             >
               {step}
@@ -41,7 +39,7 @@ function StepIndicator({ steps, currentStep }) {
 
             {index < steps.length - 1 && (
               <span
-                className={`ml-auto hidden h-0.5 flex-1 rounded-full sm:block ${
+                className={`h-0.5 min-w-4 flex-1 rounded-full ${
                   isComplete ? "bg-teal-brand/50" : "bg-border"
                 }`}
                 aria-hidden="true"

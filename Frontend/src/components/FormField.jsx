@@ -4,7 +4,7 @@ import { AlertCircle } from "lucide-react";
 // Shared input styling. Border + focus ring colours are supplied by FormField
 // (valid vs. error) so the two states never conflict.
 export const inputClassName =
-  "h-11 w-full rounded-xl border bg-surface px-3.5 text-sm text-ink shadow-sm shadow-slate-200/50 outline-none transition placeholder:text-muted focus:ring-4 disabled:cursor-not-allowed disabled:bg-background";
+  "h-11 w-full rounded-xl border bg-surface px-3.5 text-base text-ink shadow-sm shadow-slate-200/50 outline-none transition placeholder:text-muted focus:ring-4 disabled:cursor-not-allowed disabled:bg-background sm:text-sm";
 
 const validControl = "border-border focus:border-secondary focus:ring-secondary/15";
 const invalidControl = "border-error focus:border-error focus:ring-error/15";
