@@ -6,14 +6,30 @@ const connectDB = async () => {
 
     if (!mongoURI) {
       throw new Error(
-        "MONGODB_URI is missing. Please add your MongoDB connection string to the MONGODB_URI variable in the .env file."
+        "MONGODB_URI is missing. Please configure it in your environment variables."
       );
     }
 
-    const connectionInstance = await mongoose.connect(mongoURI);
+    console.log("MongoDB connection attempt started");
+
+    mongoose.connection.on("connected", () => {
+      console.log("Mongoose connected successfully");
+    });
+
+    mongoose.connection.on("disconnected", () => {
+      console.error("Mongoose disconnected");
+    });
+
+    mongoose.connection.on("error", (error) => {
+      console.error("Mongoose connection error:", error.message);
+    });
+
+    const connectionInstance = await mongoose.connect(mongoURI, {
+      serverSelectionTimeoutMS: 10000,
+    });
 
     console.log(
-      `MongoDB connected successfully !! Host: ${connectionInstance.connection.host}`
+      `MongoDB connected successfully. Host: ${connectionInstance.connection.host}`
     );
   } catch (error) {
     console.error("MongoDB connection failed:", error.message);
